@@ -30,7 +30,7 @@ To change the file structure that is generated, modify the `CONFIGURATION` objec
 To create a component named `MyComponent`, run the following command:
 
 ```
-node index -c MyComponent
+node index.js -c MyComponent
 ```
 
 The structure of the created files and folders will be as follows:
