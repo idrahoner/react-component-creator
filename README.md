@@ -39,10 +39,12 @@ The structure of the created files and folders will be as follows:
 root
 └── src
     └── components
-        ├── index.js
-        ├── MyComponent.jsx
-        └── MyComponent.styled.jsx
+        └── MyComponent
+            ├── index.js
+            ├── MyComponent.jsx
+            └── MyComponent.styled.jsx
 ```
+The same works with pages. A `pages` folder is created instead of the `components` folder.
 
 ## Contributing
 
