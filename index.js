@@ -1,6 +1,12 @@
 const fs = require("fs/promises");
 const path = require("path");
 
+const CONFIGURATION = Object.freeze({
+  reexport: "index.js",
+  componentExtension: ".jsx",
+  stylesExtension: ".styled.jsx",
+});
+
 const COMPONENTS_TYPE = Object.freeze({
   components: "components",
   pages: "pages",
@@ -18,15 +24,20 @@ const normalizeNames = (namesList) => {
 };
 
 const createFiles = async (folderName, fileName) => {
+  if (CONFIGURATION.reexport) {
+    await fs.writeFile(
+      path.join(folderName, "index.js"),
+      `export { default } from './${fileName}';\n`
+    );
+  }
   await fs.writeFile(
-    path.join(folderName, "index.js"),
-    `export { default } from './${fileName}';\n`
-  );
-  await fs.writeFile(
-    path.join(folderName, fileName + ".jsx"),
+    path.join(folderName, fileName + CONFIGURATION.componentExtension),
     `export default function ${fileName}() {\n\treturn <h1>This is ${fileName}!</h1>;\n}`
   );
-  await fs.writeFile(path.join(folderName, fileName + ".styled.jsx"), "");
+  await fs.writeFile(
+    path.join(folderName, fileName + CONFIGURATION.stylesExtension),
+    ""
+  );
 };
 
 const createFolder = async (componentType, componentName) => {
@@ -40,6 +51,22 @@ const createFolder = async (componentType, componentName) => {
   return componentFolderPath;
 };
 
+const readCurrentDirectory = async (componentType) => {
+  const rootDirectory = await fs.readdir(path.join(__dirname), {
+    encoding: "utf-8",
+  });
+  if (!rootDirectory.includes("src")) {
+    return [];
+  }
+  const srcDirectory = await fs.readdir(path.join(__dirname, "src"), {
+    encoding: "utf-8",
+  });
+  if (!srcDirectory.includes(componentType)) {
+    return [];
+  }
+  return await fs.readdir(path.join(__dirname, "src", componentType));
+};
+
 const create = async (componentType, componentsList) => {
   if (!componentsList.length) {
     console.log("You should pass component(s) name");
@@ -48,8 +75,17 @@ const create = async (componentType, componentsList) => {
 
   const correctedNames = normalizeNames(componentsList);
 
+  const existedComponents = await readCurrentDirectory(componentType);
+
   return await Promise.all(
     correctedNames.map(async (componentName) => {
+      if (
+        existedComponents.length &&
+        existedComponents.includes(componentName)
+      ) {
+        console.log(`${componentName} is already existed!`);
+        return;
+      }
       const folderPath = await createFolder(componentType, componentName);
       await createFiles(folderPath, componentName);
       console.log(`${componentName} created successfully!`);

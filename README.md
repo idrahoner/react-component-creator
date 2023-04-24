@@ -2,24 +2,36 @@
 
 This project is a command-line tool that helps simplify the process of creating components and pages for React applications. The primary goal of the project is to reduce the amount of time and effort required to create components and pages, enabling developers to focus on other important tasks.
 
-## Getting Started
+## Usage
 
-To use this tool, you will need to create an empty JavaScript file in the root directory of your project and copy the code from this project into that file. If necessary, you can modify the code to fit your personal style and preferences.
-
-Once you have the script set up, you can run it by executing the following command in your terminal:
+To use this script, create an empty JS file in the root of your project and copy the code from this repository. Customize the script to fit your preferences as needed. Then, run the command:
 
 ```
 node filename.js action-flag component1 component2 ... componentN
 ```
 
-Replace "filename.js" with the name of the file you created, "action-flag" with the appropriate flag for the action you want to perform:
+Replace `filename.js`" with the name of the file you created, "action-flag" with the appropriate flag for the action you want to perform.
 
-* --component or -c to create a component
-* --page or -p to create a page
+### Available Flags
 
-You can pass the names of the components or pages you want to create in PascalCase, camelCase, or kebab-case notation. The script will convert the names to PascalCase notation by default.
+- `--component` or `-c` to create a component
+- `--page` or `-p` to create a page
 
-The script will create the necessary directories and files in a structured manner, allowing you to easily organize and manage your project. By default, the structure is designed for projects that use styled-components, but it can also be used with CSS modules by replacing the file extension "ComponentName.styled.jsx" with "ComponentName.module.css".
+### Naming Conventions
+
+Component names can be passed in PascalCase, camelCase, or kebab-case notation. The script will automatically convert them to PascalCase.
+
+### Configuration
+
+To change the file structure that is generated, modify the `CONFIGURATION` object at the top of the script. By default, the structure is designed for projects that use styled-components, but it can be modified to work with CSS modules as well. If you don't want to create an `index.js` file, simply remove the `reexport` property from the `CONFIGURATION` object.
+
+## Example
+
+To create a component named `MyComponent`, run the following command:
+
+```
+node index -c MyComponent
+```
 
 The structure of the created files and folders will be as follows:
 
@@ -28,8 +40,8 @@ root
 └── src
     └── components or pages
         ├── index.js
-        ├── ComponentName.jsx
-        └── ComponentName.styled.jsx
+        ├── MyComponent.jsx
+        └── MyComponent.styled.jsx
 ```
 
 ## Contributing
