@@ -10,7 +10,7 @@ To use this script, create an empty JS file in the root of your project and copy
 node filename.js action-flag component1 component2 ... componentN
 ```
 
-Replace `filename.js`" with the name of the file you created, "action-flag" with the appropriate flag for the action you want to perform.
+Replace `filename.js` with the name of the file you created, "action-flag" with the appropriate flag for the action you want to perform.
 
 ### Available Flags
 
@@ -38,7 +38,7 @@ The structure of the created files and folders will be as follows:
 ```
 root
 └── src
-    └── components or pages
+    └── components
         ├── index.js
         ├── MyComponent.jsx
         └── MyComponent.styled.jsx
