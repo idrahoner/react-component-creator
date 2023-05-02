@@ -26,18 +26,22 @@ const normalizeNames = (namesList) => {
 const createFiles = async (folderName, fileName) => {
   if (CONFIGURATION.reexport) {
     await fs.writeFile(
-      path.join(folderName, "index.js"),
+      path.join(folderName, CONFIGURATION.reexport),
       `export { default } from './${fileName}';\n`
     );
   }
-  await fs.writeFile(
-    path.join(folderName, fileName + CONFIGURATION.componentExtension),
-    `export default function ${fileName}() {\n\treturn <h1>This is ${fileName}!</h1>;\n}`
-  );
-  await fs.writeFile(
-    path.join(folderName, fileName + CONFIGURATION.stylesExtension),
-    ""
-  );
+  if (CONFIGURATION.componentExtension) {
+    await fs.writeFile(
+      path.join(folderName, fileName + CONFIGURATION.componentExtension),
+      `export default function ${fileName}() {\n\treturn <h1>This is ${fileName}!</h1>;\n}`
+    );
+  }
+  if (CONFIGURATION.stylesExtension) {
+    await fs.writeFile(
+      path.join(folderName, fileName + CONFIGURATION.stylesExtension),
+      ""
+    );
+  }
 };
 
 const createFolder = async (componentType, componentName) => {
@@ -69,7 +73,7 @@ const readCurrentDirectory = async (componentType) => {
 
 const create = async (componentType, componentsList) => {
   if (!componentsList.length) {
-    console.log("You should pass component(s) name");
+    console.log("\x1b[31m", "You should pass component(s) name");
     return;
   }
 
@@ -83,12 +87,12 @@ const create = async (componentType, componentsList) => {
         existedComponents.length &&
         existedComponents.includes(componentName)
       ) {
-        console.log(`${componentName} is already existed!`);
+        console.log("\x1b[31m", `${componentName} is already existed!`);
         return;
       }
       const folderPath = await createFolder(componentType, componentName);
       await createFiles(folderPath, componentName);
-      console.log(`${componentName} created successfully!`);
+      console.log("\x1b[32m", `${componentName} created successfully!`);
     })
   );
 };
@@ -104,11 +108,12 @@ const createStructure = async (action, components) => {
         return await create(COMPONENTS_TYPE.pages, components);
       default:
         return console.log(
+          "\x1b[31m",
           "Set correct action flag: --component (-c) or --page (-p)!"
         );
     }
   } catch (error) {
-    console.log(error);
+    console.log("\x1b[31m", error);
   }
 };
 
